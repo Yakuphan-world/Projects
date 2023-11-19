@@ -1,0 +1,76 @@
+ Here is a Terraform configuration file to deploy a Kubernetes cluster with the provided details on AWS:
+
+```hcl
+# Provider configuration
+provider "aws" {
+  region = "eu-central-1"
+}
+
+# VPC Networking Resources
+resource "aws_vpc" "yakup-vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "yakup-vpc"
+  }
+}
+
+resource "aws_subnet" "private-1" {
+  vpc_id     = aws_vpc.yakup-vpc.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "eu-central-1a"
+
+  tags = {
+    Name = "private-1"
+  }
+}
+
+resource "aws_subnet" "private-2" {
+  vpc_id     = aws_vpc.yakup-vpc.id
+  cidr_block = "10.0.2.0/24" 
+  availability_zone = "eu-central-1b"
+
+  tags = {
+    Name = "private-2" 
+  }
+}
+
+# EKS Cluster Resources
+resource "aws_eks_cluster" "yakup" {
+  name     = "yakupCluster"
+  role_arn = aws_iam_role.eks.arn
+
+  vpc_config {
+    subnet_ids = [aws_subnet.private-1.id, aws_subnet.private-2.id]
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks-ClusterPolicy,
+    aws_iam_role_policy_attachment.eks-ServicePolicy
+  ]
+}
+
+# EKS Node Group
+resource "aws_eks_node_group" "example" {
+  cluster_name    = aws_eks_cluster.yakup.name
+  node_group_name = "node-group-1"
+  node_role_arn   = aws_iam_role.eks-node.arn
+  subnet_ids      = [aws_subnet.private-1.id, aws_subnet.private-2.id]
+
+  scaling_config {
+    desired_size = 2
+    max_size     = 2
+    min_size     = 2
+  }
+
+  instance_types = ["t3.medium"]
+
+  depends_on = [
+    aws_iam_role_policy_attachment.node-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.node-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.node-AmazonEC2ContainerRegistryReadOnly
+  ]
+}
+```
+
+This deploys a 2 node Kubernetes cluster on AWS EKS in the eu-central-1 region across two private subnets as specified in the requirements.
