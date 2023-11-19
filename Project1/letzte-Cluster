@@ -1,0 +1,114 @@
+ Here is the Terraform configuration to deploy a Kubernetes cluster on AWS based on the provided details:
+
+```terraform
+# Configure AWS provider
+provider "aws" {
+  region = "eu-central-1"
+}
+
+# Create VPC for Kubernetes cluster
+resource "aws_vpc" "kubernetes-vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "kubernetes-vpc"
+  }
+}
+
+# Create private subnet
+resource "aws_subnet" "kubernetes-subnet" {
+  vpc_id     = aws_vpc.kubernetes-vpc.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "eu-central-1a"
+
+  tags = {
+    Name = "kubernetes-private-subnet" 
+  }
+}
+
+# Create Kubernetes cluster
+resource "aws_eks_cluster" "kubernetes" {
+  name     = "DevOpsCluster"
+  role_arn = aws_iam_role.eks-cluster-role.arn
+
+  vpc_config {
+    subnet_ids = [aws_subnet.kubernetes-subnet.id]
+  }
+
+  tags = {
+    Name = "DevOpsCluster"
+  }
+}
+
+# Create IAM role for EKS cluster
+resource "aws_iam_role" "eks-cluster-role" {
+  name = "eks-cluster-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "eks.amazonaws.com"
+      }, 
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+# Create EKS managed node group
+resource "aws_eks_node_group" "eks-nodes" {
+  cluster_name    = aws_eks_cluster.kubernetes.name
+  node_group_name = "eks-nodes"
+  node_role_arn   = aws_iam_role.eks-node-group-role.arn
+  subnet_ids      = [aws_subnet.kubernetes-subnet.id]
+  instance_types   = ["t3.medium"]
+  scaling_config {
+    desired_size = 2
+    max_size     = 2
+    min_size     = 2
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks-node-group-role-policy 
+  ]
+}
+
+# Create IAM role for EKS node group
+resource "aws_iam_role" "eks-node-group-role" {
+  name = "eks-node-group-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+# Attach EKS managed node IAM role policy
+resource "aws_iam_role_policy_attachment" "eks-node-group-role-policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role       = aws_iam_role.eks-node-group-role.name
+}
+
+# Attach EKS managed node IAM role policy
+resource "aws_iam_role_policy_attachment" "eks-node-group-role-cni-policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = aws_iam_role.eks-node-group-role.name
+}
+```
+
+This Terraform configuration deploys a Kubernetes cluster named "DevOpsCluster" in the eu-central-1 region. It consists of a single EKS cluster with 2 nodes of type t3.medium that are placed in a private subnet. Required IAM roles and policies are also created.
