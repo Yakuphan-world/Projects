@@ -98,7 +98,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           ]
           period = 300
           stat   = "Average"
-          region = "us-east-1"
+          region = "eu-central-1"
           title  = "EC2 Instance CPU"
         }
       },
