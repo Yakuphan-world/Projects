@@ -16,8 +16,8 @@
 
 1. **Preparing the Project Infrastructure:**
 
-   - Create an AWS account or use an existing AWS account.
-   - Create a Virtual Private Cloud (VPC) and subnets in AWS.
+   - Create an AWS account or use an existing AWS account...
+   - Create a Virtual Private Cloud (VPC) and subnets in AWS...
 
 2. **Setting Up the Terraform Environment:**
 
