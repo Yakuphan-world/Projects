@@ -2,6 +2,7 @@ Medium Article: Make AWS Secrets Manager Secrets Easily Accessible for Your Amaz
 I have written a detailed article on Medium that explains how to seamlessly integrate AWS Secrets Manager with Amazon EKS to manage secrets securely in your Kubernetes workloads.
 
 🔗 Read the full article here: Make AWS Secrets Manager Secrets Easily Accessible for Your Amazon EKS Workloads
+  https://medium.com/@yakuphanbilgic3/make-aws-secrets-manager-secrets-easily-accessible-for-your-amazon-eks-workloads-790d9ab0d72c
 
 In this article, you will learn how to:
 
