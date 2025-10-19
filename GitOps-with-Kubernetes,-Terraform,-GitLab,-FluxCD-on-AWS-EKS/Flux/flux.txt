@@ -1,0 +1,26 @@
+export GITLAB_TOKEN=glpat-GTy0nvv9Pw1wYwgD287rr286MQp1OmlneHJxCw.01.121gjjffx
+
+flux bootstrap gitlab \
+  --deploy-token-auth \
+  --owner=Yakuphan-world \
+  --repository=flux-with-aws-eks \
+  --branch=main \
+  --path=Flux \
+  --personal
+
+  https://gitlab.com/Yakuphan-world/flux-with-aws-eks
+
+
+
+export GITLAB_TOKEN=glpat-0SRO_lnb3a5UeQ99ao15f286MQp1OmlneTNjCw.01.1207s7j2c
+export GITLAB_USER="Yakuphan-world"
+
+flux bootstrap gitlab \
+  --hostname=gitlab.com \
+  --token-auth \
+  --owner=Yakuphan-world \
+  --repository=flux-with-aws-eks \
+  --branch=main \
+  --path=Flux
+
+aws eks --region eu-central-1 update-kubeconfig --name EKS_CLOUD
