@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: my-app
+          image: nginx:1.27
+          env:
+            - name: ENV
+              value: prod

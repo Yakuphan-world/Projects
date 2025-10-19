@@ -1,4 +1,4 @@
-export GITLAB_TOKEN=glpat-GTy0nvv9Pw1wYwgD287rr286MQp1OmlneHJxCw.01.121gjjffx
+export GITLAB_TOKEN=glpat-SPhMcqCBMpG8gaYn2n7pfW86MQp1OmlocnpsCw.01.121e8li1x
 
 flux bootstrap gitlab \
   --deploy-token-auth \
@@ -24,3 +24,5 @@ flux bootstrap gitlab \
   --path=Flux
 
 aws eks --region eu-central-1 update-kubeconfig --name EKS_CLOUD
+
+glpat-SPhMcqCBMpG8gaYn2n7pfW86MQp1OmlocnpsCw.01.121e8li1x
