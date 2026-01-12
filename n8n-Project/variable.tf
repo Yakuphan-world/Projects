@@ -1,11 +1,11 @@
 variable "aws_region" {
   type    = string
-  default = "eu-west-1"
+  default = "eu-central-1"
 }
 
 variable "instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t3.medium"
 }
 
 variable "key_name" {
