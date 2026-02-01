@@ -1,0 +1,4 @@
+aws iam put-role-policy \
+  --role-name eks-alb-controller-role \
+  --policy-name ALBControllerPolicy \
+  --policy-document file://alb-controller-policy.json
