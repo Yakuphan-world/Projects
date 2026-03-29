@@ -90,7 +90,7 @@ EOF
     Name = "OpenClaw-Server"
   }
 }
-
+ 
 # EBS Volume
 resource "aws_ebs_volume" "openclaw_data" {
   availability_zone = aws_instance.openclaw_server.availability_zone
