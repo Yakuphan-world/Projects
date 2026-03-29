@@ -74,3 +74,4 @@ pnpm-debug.log*
 # --- Misc ---
 *.bak
 *.old
+*.pem
